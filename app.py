@@ -18,7 +18,12 @@ client = InferenceClient(model="stabilityai/stable-diffusion-3-medium-diffusers"
 
 @app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory('.', 'home.html')
+
+@app.route('/login.html')
+@app.route('/login')
+def login_page():
+    return send_from_directory('.', 'login.html')
 
 @app.route('/dashboard.html')
 @app.route('/dashboard')

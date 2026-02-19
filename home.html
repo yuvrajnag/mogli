@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mogli - Homepage</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;700;800&family=Satisfy&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hero-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        /* Hero Video - Absolute Fidelity */
+        .hero-video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Glassy Top Bar - FIGMA 1:1 */
+        .top-nav {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            height: 65px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 35px;
+            z-index: 10;
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.1),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Glossy Highlight inside Top Bar */
+        .top-nav::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 100px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent);
+            pointer-events: none;
+        }
+
+        .mogli-logo-nav {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+            text-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .get-started-btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 100px;
+            padding: 10px 35px;
+            font-size: 20px;
+            font-weight: 800;
+            font-style: italic;
+            font-family: 'Satisfy', cursive;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .get-started-btn:hover {
+            transform: scale(1.05);
+            background: #eee;
+        }
+
+        /* Dark Overlay for Depth */
+        .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.6) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Unmute Button */
+        .unmute-btn {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 100;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .unmute-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero-container">
+        <!-- Top Gassy Nav -->
+        <nav class="top-nav">
+            <div class="mogli-logo-nav">Mogli</div>
+            <button class="get-started-btn" onclick="window.location.href='login.html'">Get started</button>
+        </nav>
+
+        <!-- Main Content Video Background (Auto muted for autoplay) -->
+        <video id="heroVideo" autoplay muted loop playsinline class="hero-video">
+            <source src="Assets-Lg/mogli-hero.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Depth Overlay -->
+        <div class="overlay"></div>
+
+        <!-- Unmute Toggle -->
+        <button class="unmute-btn" id="unmuteBtn">
+            <span>UNMUTE AUDIO</span>
+        </button>
+    </div>
+
+    <script>
+        const video = document.getElementById('heroVideo');
+        const unmuteBtn = document.getElementById('unmuteBtn');
+
+        unmuteBtn.addEventListener('click', () => {
+            if (video.muted) {
+                video.muted = false;
+                unmuteBtn.querySelector('span').innerText = 'MUTE AUDIO';
+            } else {
+                video.muted = true;
+                unmuteBtn.querySelector('span').innerText = 'UNMUTE AUDIO';
+            }
+        });
+    </script>
+</body>
+
+</html>
