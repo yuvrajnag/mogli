@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generator</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sarina&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #000000;
+            --sidebar-bg: #1a1a1a;
+            --text-color: #ffffff;
+            --secondary-text: #a0a0a0;
+            --accent-color: #333333;
+            --border-color: #333333;
+            --input-bg: #111111;
+            --border-width: 2px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Custom Scrollbar */
+        *::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+            background-color: #111111;
+        }
+
+        *::-webkit-scrollbar-track {
+            background-color: #111111;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: #000000;
+            border-radius: 5px;
+            border: 2px solid #111111;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-right: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-img {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .sidebar-toggle {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+            cursor: pointer;
+        }
+
+        .workspace-selector {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            cursor: pointer;
+        }
+
+        .ws-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .ws-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 25px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--secondary-text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            opacity: 0.7;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .section-label {
+            font-size: 11px;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-left: 12px;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #222;
+            margin: 10px 0 25px 0;
+        }
+
+        .sign-out-btn {
+            margin-top: auto;
+            width: 10%;
+            cursor: pointer;
+            padding-bottom: 10px;
+        }
+
+        .sign-out-img {
+            width: 35px;
+            object-fit: contain;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            border-bottom: var(--border-width) solid var(--border-color);
+        }
+
+        .breadcrumbs {
+            font-size: 14px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .breadcrumbs span {
+            color: var(--secondary-text);
+            margin: 0 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .credits-pill {
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+            padding: 5px 12px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: black;
+            border: none;
+        }
+
+        .credits-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .profile-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+        }
+
+        /* Workspace Grid */
+        .workspace {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 70px);
+        }
+
+        /* Left Panel - Controls */
+        .controls {
+            width: 340px;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            padding-bottom: 15px;
+            border-right: var(--border-width) solid var(--border-color);
+            position: relative;
+        }
+
+        .controls-content {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .prompt-label {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-color);
+        }
+
+        /* Chat Bubble */
+        .chat-bubble {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+            padding: 1px;
+        }
+
+        .chat-content {
+            flex: 1;
+        }
+
+        .chat-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .chat-text {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.4;
+        }
+
+        .prompt-input {
+            width: 100%;
+            height: 150px;
+            background-color: var(--input-bg);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 16px;
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        .enhance-btn {
+            position: absolute;
+            bottom: 30px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .enhance-btn:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .enhance-btn i {
+            font-size: 16px;
+        }
+
+        .enhance-label {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .ratio-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: black;
+            border: 1px solid #333;
+            padding: 0 14px;
+            border-radius: 25px;
+            cursor: pointer;
+            height: 42px;
+            position: relative;
+        }
+
+        .checkbox-fake {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #666;
+            border-radius: 4px;
+        }
+
+        .ratio-text {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .generate-btn {
+            flex: 1;
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+            font-family: 'Sarina', cursive;
+            font-size: 20px;
+            color: black;
+            border: none;
+            border-radius: 50px;
+            padding: 0 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            height: 42px;
+            transition: transform 0.1s;
+            white-space: nowrap;
+        }
+
+        .generate-btn:active {
+            transform: scale(0.98);
+        }
+
+        .generate-icon-img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        /* Right Panel - Preview */
+        .preview-area-container {
+            flex: 1;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .preview-card {
+            width: 100%;
+            height: 100%;
+            background-color: #080808;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            position: relative;
+        }
+
+        /* Ratio Popup */
+        .ratio-popup {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            width: 220px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 8px;
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .ratio-popup.active {
+            display: flex;
+        }
+
+        .ratio-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #ccc;
+        }
+
+        .ratio-option:hover,
+        .ratio-option.selected {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .ratio-icon {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid #888;
+            border-radius: 2px;
+            margin-right: 12px;
+        }
+
+        /* Slash Menu */
+        .slash-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .slash-menu.active {
+            display: flex;
+        }
+
+        .slash-option {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .slash-option:hover,
+        .slash-option.selected {
+            background-color: #333;
+        }
+
+        .slash-option-desc {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Preview Actions */
+        .preview-actions-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            pointer-events: none;
+        }
+
+        .action-group-left,
+        .action-group-right {
+            display: flex;
+            gap: 10px;
+            pointer-events: auto;
+        }
+
+        /* Preview Actions Overlay */
+        .preview-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .preview-card:hover .preview-overlay,
+        .preview-card.has-image .preview-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .action-btn {
+            background-color: #ffffff;
+            color: black;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            /* Slightly larger */
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+            background-color: #f0f0f0;
+        }
+
+        .action-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .initial-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .initial-image {
+            width: 320px;
+            opacity: 0.5;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            text-align: center;
+            width: 320px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0 5px;
+        }
+
+        .btn-cancel {
+            background-color: #333;
+            color: white;
+        }
+
+        .btn-confirm {
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo-area">
+            <img src="assets-lg/Mogli logo name.png" alt="Mogli" class="logo-img">
+            <img src="assets-lg/sidebar.png" class="sidebar-toggle">
+        </div>
+
+        <div class="workspace-selector">
+            <div class="ws-left">
+                <img src="assets-lg/personal.png" class="ws-icon">
+                <span>Personal</span>
+            </div>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+
+        <div class="nav-section">
+            <a href="dashboard.html" class="nav-item">
+                <img src="assets-lg/home 1.png" class="nav-icon">
+                <span>Home</span>
+            </a>
+            <a href="/history" class="nav-item">
+                <img src="assets-lg/history 1.png" class="nav-icon">
+                <span>History</span>
+            </a>
+            <a href="/projects" class="nav-item">
+                <img src="assets-lg/folder (3).png" class="nav-icon">
+                <span>Projects</span>
+            </a>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-label">Tools</div>
+        <div class="nav-section">
+            <a href="/spaces" class="nav-item">
+                <img src="assets-lg/nodes.png" class="nav-icon">
+                <span>Spaces</span>
+            </a>
+            <a href="/ng.html?mode=general" class="nav-item">
+                <img src="assets-lg/assistant.png" class="nav-icon">
+                <span>Assistant</span>
+            </a>
+            <a href="/lg.html?mode=logo" class="nav-item active">
+                <img src="assets-lg/generative-image 1.png" class="nav-icon">
+                <span>Logo Generator</span>
+            </a>
+            <div class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>All Tools</span>
+            </div>
+        </div>
+
+        <div class="sign-out-btn">
+            <img src="assets-lg/sign out.png" class="sign-out-img">
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="breadcrumbs" id="breadcrumbs">Personal Project <span>/</span> Logo Generator</div>
+            <div class="header-actions">
+                <div class="credits-pill">
+                    <img src="assets-lg/banana 1.png" alt="Credits" class="credits-icon">
+                    <span id="credit-count">150</span>
+                </div>
+                <div class="profile-icon"></div>
+            </div>
+        </div>
+
+        <div class="workspace">
+            <div class="controls">
+                <div class="chat-bubble">
+                    <img src="assets-lg/paintm3.png" alt="Mogli" class="chat-avatar">
+                    <div class="chat-content">
+                        <div class="chat-name">Mogli</div>
+                        <div class="chat-text" id="chatText">Hi, I am an expert designer and I am currently in Logo
+                            Design mode. If you want to use me for other purposes, please use '/' to change mode.</div>
+                    </div>
+                </div>
+
+                <div class="controls-content">
+                    <div class="prompt-label">Prompt</div>
+                    <div style="position: relative;">
+                        <div class="slash-menu" id="slashMenu">
+                            <div class="slash-option" data-mode="logo">
+                                <div class="slash-option-text">
+                                    <div class="slash-option-name">/logo</div>
+                                    <div class="slash-option-desc">Professional logo design</div>
+                                </div>
+                            </div>
+                            <div class="slash-option" data-mode="poster">
+                                <div class="slash-option-text">
+                                    <div class="slash-option-name">/poster</div>
+                                    <div class="slash-option-desc">Social media posters</div>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea class="prompt-input" id="promptInput" placeholder="Describe your logo"></textarea>
+                        <button class="enhance-btn" id="enhanceBtn" title="Enhance Prompt">
+                            <span class="enhance-label">Enhance</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="action-row">
+                        <div class="ratio-toggle" id="ratioToggle">
+                            <div class="checkbox-fake"></div>
+                            <span class="ratio-text" id="ratioText">1:1</span>
+                            <div class="ratio-popup" id="ratioPopup">
+                                <div class="ratio-option selected" data-ratio="1:1">1:1 Square</div>
+                                <div class="ratio-option" data-ratio="16:9">16:9 Widescreen</div>
+                                <div class="ratio-option" data-ratio="9:16">9:16 Story</div>
+                                <div class="ratio-option" data-ratio="4:5">4:5 Social Post</div>
+                            </div>
+                        </div>
+                        <button class="generate-btn" id="generateBtn">
+                            <span>Generate</span>
+                            <img src="assets-lg/sparkles.png" class="generate-icon-img">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-area-container">
+                <div class="preview-card" id="previewCard">
+                    <div class="initial-state">
+                        <div class="preview-card" id="previewCard">
+                            <div class="initial-state">
+                                <div>Mogli is ready to create.</div>
+                            </div>
+                            <!-- Actions will be injected here after generation -->
+                            <div class="preview-overlay" id="previewActions" style="display: none;">
+                                <div class="preview-action-group">
+                                    <button class="preview-btn" onclick="toggleLike(this)" title="Like">
+                                        <svg viewBox="0 0 24 24">
+                                            <path
+                                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                    <button class="preview-btn" onclick="toggleDislike(this)" title="Dislike">
+                                        <svg viewBox="0 0 24 24">
+                                            <path
+                                                d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17z">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="preview-action-group">
+                                    <button class="preview-btn" id="downloadBtn" title="Download">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="confirmModal" class="modal">
+                <div class="modal-content">
+                    <h3>Confirm Generation</h3>
+                    <p style="margin: 15px 0; color: #aaa;">This costs 10 credits.</p>
+                    <button class="modal-btn btn-cancel" id="cancelBtn">Cancel</button>
+                    <button class="modal-btn btn-confirm" id="confirmBtn">Confirm</button>
+                </div>
+            </div>
+
+            <script>
+                // Persistent Credits
+                let credits = parseInt(localStorage.getItem('mogli_credits')) || 150;
+                document.getElementById('credit-count').innerText = credits;
+
+                function updateCredits(amount) {
+                    credits -= amount;
+                    localStorage.setItem('mogli_credits', credits);
+                    document.getElementById('credit-count').innerText = credits;
+                }
+
+                let currentMode = 'logo';
+                let currentRatio = '1:1';
+
+                const promptInput = document.getElementById('promptInput');
+                const slashMenu = document.getElementById('slashMenu');
+                const generateBtn = document.getElementById('generateBtn');
+                const previewCard = document.getElementById('previewCard');
+                const breadcrumbs = document.getElementById('breadcrumbs');
+                const chatText = document.getElementById('chatText');
+                const ratioToggle = document.getElementById('ratioToggle');
+                const ratioPopup = document.getElementById('ratioPopup');
+                const ratioText = document.getElementById('ratioText');
+
+                // Slash command
+                function toggleSlashMenu() {
+                    if (promptInput.value.trim() === '/') {
+                        slashMenu.classList.add('active');
+                    } else {
+                        slashMenu.classList.remove('active');
+                    }
+                }
+
+                promptInput.addEventListener('input', toggleSlashMenu);
+                promptInput.addEventListener('focus', toggleSlashMenu);
+                promptInput.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleSlashMenu();
+                });
+
+                document.querySelectorAll('.slash-option').forEach(opt => {
+                    opt.onclick = () => {
+                        currentMode = opt.dataset.mode;
+                        slashMenu.classList.remove('active');
+                        promptInput.value = '';
+
+                        if (currentMode === 'poster') {
+                            currentRatio = '4:5';
+                            ratioText.innerText = '4:5';
+                            document.querySelectorAll('.ratio-option').forEach(o => {
+                                o.classList.remove('selected');
+                                if (o.dataset.ratio === '4:5') o.classList.add('selected');
+                            });
+                            promptInput.placeholder = 'Describe your poster';
+                            chatText.innerText = "Hi, I am an expert designer and I am currently in Poster Design mode. If you want to use me for other purposes, please use '/' to change mode.";
+                        } else {
+                            currentRatio = '1:1';
+                            ratioText.innerText = '1:1';
+                            document.querySelectorAll('.ratio-option').forEach(o => {
+                                o.classList.remove('selected');
+                                if (o.dataset.ratio === '1:1') o.classList.add('selected');
+                            });
+                            promptInput.placeholder = 'Describe your logo';
+                            chatText.innerText = "Hi, I am an expert designer and I am currently in Logo Design mode. If you want to use me for other purposes, please use '/' to change mode.";
+                        }
+
+                        breadcrumbs.innerHTML = `Personal Project <span>/</span> ${currentMode.charAt(0).toUpperCase() + currentMode.slice(1)} Generator`;
+                    };
+                });
+
+                // Ratio
+                ratioToggle.onclick = (e) => { e.stopPropagation(); ratioPopup.classList.toggle('active'); };
+                document.querySelectorAll('.ratio-option').forEach(opt => {
+                    opt.onclick = (e) => {
+                        e.stopPropagation();
+                        currentRatio = opt.dataset.ratio;
+                        ratioText.innerText = currentRatio;
+                        ratioPopup.classList.remove('active');
+                        document.querySelectorAll('.ratio-option').forEach(o => o.classList.remove('selected'));
+                        opt.classList.add('selected');
+                    };
+                });
+
+                // Generate
+                const modal = document.getElementById('confirmModal');
+                const logoKeywords = ['logo', 'icon', 'symbol', 'emblem', 'badge', 'mark', 'brand', 'identity', 'logotype', 'monogram'];
+
+                generateBtn.onclick = () => {
+                    const prompt = promptInput.value.trim().toLowerCase();
+                    if (!prompt) return;
+
+                    // Cross-mode validation
+                    const containsLogoKeyword = logoKeywords.some(keyword => prompt.includes(keyword));
+
+                    if (currentMode === 'poster' && containsLogoKeyword) {
+                        chatText.innerText = "Please change the mode for better results and accuracy.";
+                        return;
+                    }
+
+                    if (currentMode === 'logo' && !containsLogoKeyword) {
+                        chatText.innerText = "To create a great logo, try adding keywords like 'logo', 'icon', or 'symbol' to your prompt!";
+                        return;
+                    }
+
+                    modal.classList.add('active');
+                };
+
+                document.getElementById('cancelBtn').onclick = () => modal.classList.remove('active');
+                document.getElementById('confirmBtn').onclick = async () => {
+                    modal.classList.remove('active');
+                    updateCredits(10); // Use persistent credits
+                    generateBtn.disabled = true;
+                    generateBtn.querySelector('span').innerText = 'Generating';
+                    generateBtn.querySelector('span').innerText = 'Generating';
+                    previewCard.innerHTML = `
+                <div class="initial-state">
+                    <img src="assets-lg/paintm2.png" style="width: 150px; opacity: 0.8; margin-bottom: 20px;">
+                    <div>Generating masterpiece...</div>
+                </div>`;
+
+                    try {
+                        const res = await fetch(currentMode === 'logo' ? '/generate-logo' : '/generate-post', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ prompt: promptInput.value, aspect_ratio: currentRatio })
+                        });
+
+                        if (!res.ok) {
+                            const errorData = await res.json();
+                            throw new Error(errorData.error || 'Failed to generate');
+                        }
+
+                        const blob = await res.blob();
+                        const url = URL.createObjectURL(blob);
+
+                        // Update Preview Card
+                        previewCard.classList.add('has-image');
+                        previewCard.innerHTML = `<img src="${url}" id="generatedImage" style="width:100%;height:100%;object-fit:contain;border-radius:24px;">`;
+
+                        // Re-inject actions overlay
+                        const actionsHTML = `
+                    <div class="preview-overlay">
+                        <div class="action-group-left">
+                            <button class="action-btn" onclick="toggleLike(this)" title="Like">
+                                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            </button>
+                            <button class="action-btn" onclick="toggleDislike(this)" title="Dislike">
+                                <svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17z"></path></svg>
+                            </button>
+                        </div>
+                        <div class="action-group-right">
+                            <button class="action-btn" onclick="downloadImage('${url}')" title="Download">
+                                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                        previewCard.insertAdjacentHTML('beforeend', actionsHTML);
+
+                        credits -= 10;
+                        document.getElementById('credit-count').innerText = credits;
+                        chatText.innerText = "Here is your masterpiece! Hope you love it.";
+                    } catch (err) {
+                        chatText.innerText = "Mogli encountered a snag: " + err.message;
+                        previewCard.innerHTML = `<div class="initial-state">Something went wrong.</div>`;
+                        previewCard.classList.remove('has-image');
+                    } finally {
+                        generateBtn.disabled = false;
+                        generateBtn.querySelector('span').innerText = 'Generate';
+                    }
+                };
+
+                // Button Actions
+                const enhanceBtn = document.getElementById('enhanceBtn');
+                enhanceBtn.onclick = async () => {
+                    const prompt = promptInput.value.trim();
+                    if (!prompt) return;
+
+                    enhanceBtn.disabled = true;
+                    enhanceBtn.innerHTML = '<span class="enhance-label">Enhancing...</span>';
+
+                    try {
+                        const res = await fetch('/enhance-prompt', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ prompt })
+                        });
+                        const data = await res.json();
+                        if (data.enhanced_prompt) {
+                            promptInput.value = data.enhanced_prompt;
+                        }
+                    } catch (err) {
+                        console.error("Enhance error:", err);
+                    } finally {
+                        enhanceBtn.disabled = false;
+                        enhanceBtn.innerHTML = '<span class="enhance-label">Enhance</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>';
+                    }
+                };
+
+                function downloadImage(url) {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `mogli-art-${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+
+                function toggleLike(btn) {
+                    btn.style.color = btn.style.color === 'rgb(255, 64, 129)' ? 'white' : '#ff4081'; // Pink
+                    btn.querySelector('svg').style.fill = btn.style.color === 'rgb(255, 64, 129)' ? 'currentColor' : 'none';
+                }
+
+                function toggleDislike(btn) {
+                    btn.style.color = btn.style.color === 'rgb(255, 64, 129)' ? 'white' : '#ff4081';
+                }
+
+                document.addEventListener('click', (e) => {
+                    if (!slashMenu.contains(e.target) && e.target !== promptInput) {
+                        slashMenu.classList.remove('active');
+                    }
+                    if (!ratioToggle.contains(e.target)) {
+                        ratioPopup.classList.remove('active');
+                    }
+                });
+                document.querySelectorAll('.sign-out-btn').forEach(btn => {
+                    btn.onclick = () => {
+                        window.location.href = 'index.html';
+                    };
+                });
+
+                // Deep link support
+                window.addEventListener('DOMContentLoaded', () => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const modeParam = urlParams.get('mode');
+                    if (modeParam) {
+                        const targetOption = document.querySelector(`.slash-option[data-mode="${modeParam}"]`);
+                        if (targetOption) targetOption.click();
+                    }
+                });
+            </script>
+</body>
+
+</html>

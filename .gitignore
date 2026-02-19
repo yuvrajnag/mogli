@@ -1,0 +1,42 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.DS_Store
+.vscode/
+.idea/
+*.log
+tmp/
+node_modules/
+dist/
+build/
+
+# Ignore system/agent metadata
+.agent/
+brain/
+*.webp
+
+# Assets
+assets-lg/*.png
+assets-lg/*.jpg
+!assets-lg/Mogli logo name.png
+!assets-lg/Personal.png
+!assets-lg/home 1.png
+!assets-lg/history 1.png
+!assets-lg/folder (3).png
+!assets-lg/nodes.png
+!assets-lg/assistant.png
+!assets-lg/generative-image 1.png
+!assets-lg/sign out.png
+!assets-lg/banana 1.png
+!assets-lg/logo generator.png
+!assets-lg/name generator.png
+!assets-lg/text summarizer (1).png
+!assets-lg/email writing.png
+!assets-lg/product writer.png
+!assets-lg/post generator.png
+!assets-lg/project error bg image.png
+!assets-lg/sidebar.png
+!assets-lg/personal.png

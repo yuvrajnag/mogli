@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Generator</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sarina&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #000000;
+            --sidebar-bg: #121212;
+            --text-color: #ffffff;
+            --secondary-text: #a0a0a0;
+            --accent-color: #333333;
+            --border-color: #333333;
+            --input-bg: #0a0a0a;
+            --border-width: 2px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Custom Scrollbar */
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            background-color: #111111;
+        }
+
+        *::-webkit-scrollbar-track {
+            background-color: #111111;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: #000000;
+            border-radius: 5px;
+            border: 2px solid #111111;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-right: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-img {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .sidebar-toggle {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+            cursor: pointer;
+        }
+
+        .workspace-selector {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            cursor: pointer;
+        }
+
+        .ws-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .ws-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 25px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--secondary-text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            opacity: 0.7;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .section-label {
+            font-size: 11px;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-left: 12px;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #222;
+            margin: 10px 0 25px 0;
+        }
+
+        .sign-out-btn {
+            margin-top: auto;
+            width: 10%;
+            cursor: pointer;
+            padding-bottom: 10px;
+        }
+
+        .sign-out-img {
+            width: 35px;
+            object-fit: contain;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            border-bottom: var(--border-width) solid var(--border-color);
+            background-color: var(--bg-color);
+        }
+
+        .breadcrumbs {
+            font-size: 14px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .breadcrumbs span {
+            color: var(--secondary-text);
+            margin: 0 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .credits-pill {
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+            padding: 5px 12px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: black;
+            border: none;
+        }
+
+        .credits-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .profile-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+        }
+
+        /* Chat Workspace */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 40px;
+            overflow-y: auto;
+            gap: 20px;
+            position: relative;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            max-width: 85%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .msg-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .msg-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .msg-content {
+            flex: 1;
+        }
+
+        .msg-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .msg-text {
+            font-size: 15px;
+            color: #ccc;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .highlight-name {
+            display: inline-block;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 2px 0;
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 20px 40px;
+            background-color: var(--bg-color);
+        }
+
+        .input-wrapper {
+            background-color: var(--input-bg);
+            border: 1px solid #222;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-end;
+            padding: 12px 16px;
+            gap: 10px;
+            transition: border-color 0.2s;
+            position: relative;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: #444;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #fff;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            resize: none;
+            max-height: 200px;
+            padding: 4px 0;
+            line-height: 1.5;
+        }
+
+        .chat-input::placeholder {
+            color: #444;
+        }
+
+        .send-btn {
+            background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+            color: #000;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            margin-bottom: 2px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+            transform: translateX(1px);
+            /* Visually centering the arrow */
+        }
+
+        /* Slash Menu */
+        .slash-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .slash-menu.active {
+            display: flex;
+        }
+
+        .slash-option {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .slash-option:hover,
+        .slash-option.selected {
+            background-color: #333;
+        }
+
+        .slash-option-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #222;
+            border-radius: 6px;
+        }
+
+        .slash-option-text {
+            flex: 1;
+        }
+
+        .slash-option-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .slash-option-desc {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Typing Indicator */
+        .typing {
+            display: none;
+            gap: 4px;
+            padding: 10px 0;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #666;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+            }
+        }
+
+        /* Specialized Response Cards */
+        .response-card {
+            background-color: #121212;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 10px 0;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-header {
+            background-color: #1a1a1a;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #888;
+            text-transform: capitalize;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .card-action-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s, transform 0.1s;
+        }
+
+        .card-action-btn:hover {
+            color: #fff;
+        }
+
+        .card-action-btn:active {
+            transform: scale(0.9);
+        }
+
+        .card-body {
+            padding: 24px;
+            font-size: 15px;
+            color: #ddd;
+            line-height: 1.6;
+        }
+
+        .card-body strong {
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo-area">
+            <img src="assets-lg/Mogli logo name.png" alt="Mogli" class="logo-img">
+            <img src="assets-lg/sidebar.png" class="sidebar-toggle">
+        </div>
+
+        <div class="workspace-selector">
+            <div class="ws-left">
+                <img src="assets-lg/personal.png" class="ws-icon">
+                <span>Personal</span>
+            </div>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+
+        <div class="nav-section">
+            <a href="dashboard.html" class="nav-item">
+                <img src="assets-lg/home 1.png" class="nav-icon">
+                <span>Home</span>
+            </a>
+            <a href="/history" class="nav-item">
+                <img src="assets-lg/history 1.png" class="nav-icon">
+                <span>History</span>
+            </a>
+            <a href="/projects" class="nav-item">
+                <img src="assets-lg/folder (3).png" class="nav-icon">
+                <span>Projects</span>
+            </a>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-label">Tools</div>
+        <div class="nav-section">
+            <a href="/spaces" class="nav-item">
+                <img src="assets-lg/nodes.png" class="nav-icon">
+                <span>Spaces</span>
+            </a>
+            <a href="/ng.html?mode=general" class="nav-item active">
+                <img src="assets-lg/assistant.png" class="nav-icon">
+                <span>Assistant</span>
+            </a>
+            <a href="/lg.html?mode=logo" class="nav-item">
+                <img src="assets-lg/generative-image 1.png" class="nav-icon">
+                <span>Logo Generator</span>
+            </a>
+            <div class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>All Tools</span>
+            </div>
+        </div>
+
+        <div class="sign-out-btn">
+            <img src="assets-lg/sign out.png" class="sign-out-img">
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="breadcrumbs" id="breadcrumbs">Personal Project <span>/</span> Name & Slogan Generator</div>
+            <div class="header-actions">
+                <div class="credits-pill">
+                    <img src="assets-lg/banana 1.png" alt="Credits" class="credits-icon">
+                    <span id="credit-count">150</span>
+                </div>
+                <div class="profile-icon"></div>
+            </div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message">
+                <div class="msg-avatar"><img src="assets-lg/writer.png" alt="Mogli"></div>
+                <div class="msg-content">
+                    <div class="msg-name">Mogli</div>
+                    <div class="msg-text" id="initialChatText">Hi, I am an expert writer and I am currently in Name &
+                        Slogan mode. If you want to use me for other purposes, please use '/' to change mode.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <div class="slash-menu" id="slashMenu">
+                    <div class="slash-option" data-mode="name">
+                        <div class="slash-option-text">
+                            <div class="slash-option-name">/name</div>
+                            <div class="slash-option-desc">Name & Slogan Generation</div>
+                        </div>
+                    </div>
+                    <div class="slash-option" data-mode="general">
+                        <div class="slash-option-text">
+                            <div class="slash-option-name">/general</div>
+                            <div class="slash-option-desc">General AI Chat</div>
+                        </div>
+                    </div>
+                    <div class="slash-option" data-mode="summarize">
+                        <div class="slash-option-text">
+                            <div class="slash-option-name">/summarize</div>
+                            <div class="slash-option-desc">Text Summarization</div>
+                        </div>
+                    </div>
+                    <div class="slash-option" data-mode="email">
+                        <div class="slash-option-text">
+                            <div class="slash-option-name">/email</div>
+                            <div class="slash-option-desc">Email Writing</div>
+                        </div>
+                    </div>
+                    <div class="slash-option" data-mode="product">
+                        <div class="slash-option-text">
+                            <div class="slash-option-name">/product</div>
+                            <div class="slash-option-desc">Product Descriptions & Reviews</div>
+                        </div>
+                    </div>
+                </div>
+                <textarea class="chat-input" id="chatInput" placeholder="Describe what you need..." rows="1"></textarea>
+                <button class="send-btn" id="sendBtn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(btn) {
+            const card = btn.closest('.response-card');
+            const text = card.querySelector('.card-body').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 6 17 4 12"></polyline></svg>';
+                setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
+            });
+        }
+
+        // Persistent Credits
+        let credits = parseInt(localStorage.getItem('mogli_credits')) || 150;
+        document.getElementById('credit-count').innerText = credits;
+
+        function updateCredits(amount) {
+            credits -= amount;
+            localStorage.setItem('mogli_credits', credits);
+            document.getElementById('credit-count').innerText = credits;
+        }
+
+        let currentMode = 'name';
+
+        const chatContainer = document.getElementById('chatContainer');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const slashMenu = document.getElementById('slashMenu');
+        const breadcrumbs = document.getElementById('breadcrumbs');
+        const initialChatText = document.getElementById('initialChatText');
+
+        // Slash menu trigger logic
+        function toggleSlashMenu() {
+            if (chatInput.value.trim() === '/') {
+                slashMenu.classList.add('active');
+            } else {
+                slashMenu.classList.remove('active');
+            }
+        }
+
+        // Auto-resize textarea
+        function resizeInput() {
+            chatInput.style.height = '0px';
+            chatInput.style.height = chatInput.scrollHeight + 'px';
+            toggleSlashMenu();
+        }
+
+        chatInput.addEventListener('input', resizeInput);
+
+        chatInput.addEventListener('focus', toggleSlashMenu);
+        chatInput.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleSlashMenu();
+        });
+
+        document.querySelectorAll('.slash-option').forEach(opt => {
+            opt.onclick = () => {
+                currentMode = opt.dataset.mode;
+                slashMenu.classList.remove('active');
+                chatInput.value = '';
+                resizeInput();
+
+                const names = {
+                    name: "Name & Slogan Generator",
+                    general: "General AI Chat",
+                    summarize: "Text Summarizer",
+                    email: "Email Writer",
+                    product: "Product Creative Writer"
+                };
+                const descriptions = {
+                    name: "Hi, I am an expert writer and I am currently in Name & Slogan mode. If you want to use me for other purposes, please use '/' to change mode.",
+                    email: "Hi, I am an expert writer and I am currently in Email Writing mode. If you want to use me for other purposes, please use '/' to change mode.",
+                    product: "Hi, I am an expert writer and I am currently in Product Descriptions mode. If you want to use me for other purposes, please use '/' to change mode.",
+                    summarize: "Hi, I am an expert writer and I am currently in Summarization mode. If you want to use me for other purposes, please use '/' to change mode.",
+                    general: "Hi, I am an expert writer and I am currently in General Chat mode. If you want to use me for other purposes, please use '/' to change mode."
+                };
+
+                breadcrumbs.innerHTML = `Text Generator <span>/</span> ${names[currentMode]}`;
+                initialChatText.innerText = descriptions[currentMode];
+            };
+        });
+
+        function appendMessage(role, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+            const isUser = role === 'user';
+            const avatarImg = isUser ? '' : '<img src="assets-lg/paintm3.png">';
+            const name = isUser ? 'You' : 'Mogli';
+
+            let processedText = text;
+
+            if (!isUser) {
+                if (currentMode === 'name') {
+                    processedText = text.replace(/(\d+\.\s*)(.+)/g, '$1<span class="highlight-name">$2</span>');
+                } else if (currentMode === 'email' || currentMode === 'summarize' || currentMode === 'product') {
+                    let title = currentMode;
+                    let bodyText = text;
+
+                    // Specialized logic for Email Mode: Extract Subject and split content
+                    if (currentMode === 'email') {
+                        // Regex to find Subject line (case insensitive)
+                        const subjectMatch = text.match(/(Subject|Regarding):\s*(.*)/i);
+                        if (subjectMatch) {
+                            title = subjectMatch[2].trim(); // Use the extracted subject as title
+
+                            // Split text into pre-subject conversational text and actual email body
+                            const subjectIndex = subjectMatch.index;
+                            const preText = text.substring(0, subjectIndex).trim();
+                            const postSubjectText = text.substring(subjectIndex + subjectMatch[0].length).trim();
+
+                            // If there is conversational text before the subject, add it outside the card
+                            if (preText) {
+                                processedText = preText.replace(/\n/g, '<br>') + '<br><br>';
+                            } else {
+                                processedText = '';
+                            }
+
+                            // The rest is the email body inside the card
+                            bodyText = postSubjectText;
+                        }
+                    }
+
+                    let bodyHTML = bodyText.replace(/\n/g, '<br>');
+
+                    const cardHTML = `
+                        <div class="response-card">
+                            <div class="card-header">
+                                <div class="card-title">${title}</div>
+                                <div class="card-actions">
+                                    <button class="card-action-btn" onclick="copyToClipboard(this)" title="Copy Content">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 0 0 1 2-2h9a2 0 0 1 2 2v1"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                ${bodyHTML}
+                            </div>
+                        </div>
+                    `;
+
+                    processedText += cardHTML;
+                }
+            }
+
+            msgDiv.innerHTML = `
+                <div class="msg-avatar">${avatarImg}</div>
+                <div class="msg-content">
+                    <div class="msg-name">${name}</div>
+                    <div class="msg-text">${processedText}</div>
+                </div>
+            `;
+            chatContainer.appendChild(msgDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        async function getGroqResponse(prompt) {
+            try {
+                const response = await fetch('/generate-names', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt, mode: currentMode })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    return "Error: " + (data.error || "Unknown server error");
+                }
+
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    return data.choices[0].message.content;
+                } else {
+                    console.error("Unexpected API response structure:", data);
+                    return "Error: Unexpected response from assistant.";
+                }
+            } catch (err) {
+                console.error("Fetch error:", err);
+                return "Error: Could not connect to server.";
+            }
+        }
+
+        sendBtn.onclick = async () => {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // Mode validation
+            if (currentMode === 'name' && text.length > 300) {
+                appendMessage('ai', "This message is too long for Name Generation mode. Please switch to **/summarize** to handle large texts!");
+                chatInput.value = '';
+                return;
+            }
+
+            chatInput.value = '';
+            resizeInput();
+            updateCredits(1); // Use persistent credits
+
+            appendMessage('user', text);
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message';
+            typingDiv.innerHTML = `
+                <div class="msg-avatar"><img src="assets-lg/paintm3.png"></div>
+                <div class="msg-content">
+                    <div class="msg-name">Mogli</div>
+                    <div class="typing" style="display: flex;"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                </div>
+            `;
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            const res = await getGroqResponse(text);
+            chatContainer.removeChild(typingDiv);
+            appendMessage('ai', res);
+        };
+
+        chatInput.onkeydown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBtn.click(); } };
+
+        document.addEventListener('click', (e) => {
+            if (!slashMenu.contains(e.target) && e.target !== chatInput) slashMenu.classList.remove('active');
+        });
+        document.querySelectorAll('.sign-out-btn').forEach(btn => {
+            btn.onclick = () => {
+                window.location.href = 'index.html';
+            };
+        });
+
+        // Deep link support
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const modeParam = urlParams.get('mode');
+            if (modeParam) {
+                const targetOption = document.querySelector(`.slash-option[data-mode="${modeParam}"]`);
+                if (targetOption) targetOption.click();
+            }
+        });
+    </script>
+</body>
+
+</html>

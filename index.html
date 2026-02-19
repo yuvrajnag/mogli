@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mogli Authentication</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== BACKGROUND IMAGE ===== */
+        .background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("assets-lg/project error bg image.png") center center / cover no-repeat;
+            /* Updated path to existing asset */
+            filter: grayscale(1);
+            z-index: -3;
+        }
+
+        /* Dark cinematic overlay */
+        .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95)),
+                radial-gradient(circle at center, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.9));
+            z-index: -2;
+        }
+
+        /* Subtle vignette */
+        .vignette {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.9);
+            z-index: -1;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            width: 420px;
+            padding: 50px 45px;
+            border-radius: 28px;
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        /* ===== MOGLI LOGO ===== */
+        .logo {
+            font-family: 'Inter', serif;
+            font-weight: 700;
+            font-size: 42px;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+            text-align: center;
+            background: linear-gradient(to bottom, #ffffff, #cfcfcf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow:
+                0 4px 10px rgba(255, 255, 255, 0.2),
+                0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== TEXT ===== */
+        h2 {
+            font-weight: 500;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #bbb;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* ===== INPUTS ===== */
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #aaa;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            color: #ddd;
+            cursor: pointer;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 5px;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            color: #fff;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(145deg, #3a3a3a, #222);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ===== SWITCH ===== */
+        .switch {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        .switch span {
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* ===== FORM ANIMATION ===== */
+        .form {
+            transition: 0.4s ease;
+        }
+
+        .hidden {
+            opacity: 0;
+            transform: translateX(40px);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        /* Responsive */
+        @media(max-width:480px) {
+            .card {
+                width: 90%;
+                padding: 40px 30px;
+            }
+
+            .logo {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background"></div>
+    <div class="overlay"></div>
+    <div class="vignette"></div>
+
+    <div class="card">
+
+        <div class="logo">Mogli</div>
+
+        <!-- LOGIN -->
+        <div id="loginForm" class="form">
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Sign in to continue building your brand</p>
+
+            <div class="input-group">
+                <input type="email" placeholder="Email" value="demo@mogli.com">
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="loginPass" placeholder="Password" value="password">
+                <span class="toggle" onclick="togglePassword('loginPass')">Show</span>
+            </div>
+
+            <button class="btn" onclick="handleLogin()">Sign In</button>
+
+            <div class="switch">
+                Don't have an account? <span onclick="switchForm()">Sign up</span>
+            </div>
+        </div>
+
+        <!-- SIGNUP -->
+        <div id="signupForm" class="form hidden">
+            <h2>Create Account</h2>
+            <p class="subtitle">Start your journey with Mogli</p>
+
+            <div class="input-group">
+                <input type="text" placeholder="Full Name">
+            </div>
+
+            <div class="input-group">
+                <input type="email" placeholder="Email">
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="signupPass" placeholder="Password">
+                <span class="toggle" onclick="togglePassword('signupPass')">Show</span>
+            </div>
+
+            <button class="btn" onclick="handleLogin()">Create Account</button>
+
+            <div class="switch">
+                Already have an account? <span onclick="switchForm()">Sign in</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        function switchForm() {
+            document.getElementById("loginForm").classList.toggle("hidden");
+            document.getElementById("signupForm").classList.toggle("hidden");
+        }
+
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === "password" ? "text" : "password";
+        }
+
+        function handleLogin() {
+            // Initialize credits if first time
+            if (!localStorage.getItem('mogli_credits')) {
+                localStorage.setItem('mogli_credits', '150');
+            }
+            // Mock auth logic: directly redirect to dashboard
+            window.location.href = "dashboard.html";
+        }
+
+    </script>
+
+</body>
+
+</html>
