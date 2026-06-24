@@ -1,21 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { asyncHandler } = require('../middleware/errorHandler');
+const User = require('../models/User');
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'mogli-secret-key-123';
-
-// In-memory mock database for simplicity right now
-// In a real scenario, you would use Mongoose/MongoDB here.
-const users = [
-  {
-    id: 'user_1',
-    name: 'Demo User',
-    email: 'demo@mogli.com',
-    password: 'password123',
-    credits: 150
-  }
-];
 
 /**
  * POST /api/auth/login
@@ -30,12 +20,17 @@ router.post(
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    const user = users.find(u => u.email === email);
-    if (!user || user.password !== password) {
+    const user = await User.findOne({ email });
+    if (!user) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, {
       expiresIn: '7d'
     });
 
@@ -43,7 +38,7 @@ router.post(
       message: 'Login successful',
       token,
       user: {
-        id: user.id,
+        id: user._id,
         name: user.name,
         email: user.email,
         credits: user.credits
@@ -65,34 +60,40 @@ router.post(
       return res.status(400).json({ error: 'Name, email, and password are required' });
     }
 
-    if (users.find(u => u.email === email)) {
+    const userExists = await User.findOne({ email });
+    if (userExists) {
       return res.status(409).json({ error: 'Email already exists' });
     }
 
-    const newUser = {
-      id: `user_${Date.now()}`,
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
       name,
       email,
-      password, // In real scenario: hash this password using bcrypt!
+      password: hashedPassword,
       credits: 150
-    };
-
-    users.push(newUser);
-
-    const token = jwt.sign({ userId: newUser.id, email: newUser.email }, JWT_SECRET, {
-      expiresIn: '7d'
     });
 
-    res.status(201).json({
-      message: 'Account created successfully',
-      token,
-      user: {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        credits: newUser.credits
-      }
-    });
+    if (user) {
+      const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, {
+        expiresIn: '7d'
+      });
+
+      res.status(201).json({
+        message: 'Account created successfully',
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          credits: user.credits
+        }
+      });
+    } else {
+      res.status(400).json({ error: 'Invalid user data' });
+    }
   })
 );
 

@@ -1,6 +1,10 @@
 const express = require('express');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 const { asyncHandler } = require('../middleware/errorHandler');
+const { verifyToken } = require('../middleware/auth');
+const History = require('../models/History');
 
 const router = express.Router();
 
@@ -29,6 +33,7 @@ const LOGO_KEYWORDS = [
  */
 router.post(
   '/generate-logo',
+  verifyToken,
   asyncHandler(async (req, res) => {
     const { prompt, aspect_ratio = '1:1' } = req.body;
 
@@ -71,8 +76,21 @@ router.post(
       }
     );
 
+    const buffer = Buffer.from(response.data);
+    const filename = `logo_${Date.now()}.png`;
+    const filepath = path.join(__dirname, '../public/uploads', filename);
+    await fs.promises.writeFile(filepath, buffer);
+
+    await History.create({
+      userId: req.user.id,
+      type: 'logo',
+      prompt: prompt,
+      result: `/uploads/${filename}`,
+      isImage: true
+    });
+
     res.set('Content-Type', 'image/png');
-    res.send(Buffer.from(response.data));
+    res.send(buffer);
   })
 );
 
@@ -82,6 +100,7 @@ router.post(
  */
 router.post(
   '/generate-post',
+  verifyToken,
   asyncHandler(async (req, res) => {
     const { prompt, aspect_ratio = '1:1' } = req.body;
 
@@ -116,8 +135,21 @@ router.post(
       }
     );
 
+    const buffer = Buffer.from(response.data);
+    const filename = `post_${Date.now()}.png`;
+    const filepath = path.join(__dirname, '../public/uploads', filename);
+    await fs.promises.writeFile(filepath, buffer);
+
+    await History.create({
+      userId: req.user.id,
+      type: 'post',
+      prompt: prompt,
+      result: `/uploads/${filename}`,
+      isImage: true
+    });
+
     res.set('Content-Type', 'image/png');
-    res.send(Buffer.from(response.data));
+    res.send(buffer);
   })
 );
 

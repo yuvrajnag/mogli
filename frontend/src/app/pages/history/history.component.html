@@ -2,9 +2,40 @@
   <app-sidebar activePage="history"></app-sidebar>
   <div class="main-content">
     <app-header></app-header>
-    <div class="empty-container">
-      <img src="assets/project%20error%20bg%20image.png" class="empty-img">
-      <h1 class="empty-title">Nothing has been created yet</h1>
+    
+    <div class="history-container">
+      <h1 class="page-title">Your Creations</h1>
+      
+      <div *ngIf="isLoading" class="loading-state">
+        <p>Loading your history...</p>
+      </div>
+
+      <div *ngIf="!isLoading && historyItems.length === 0" class="empty-container">
+        <img src="assets/project%20error%20bg%20image.png" class="empty-img">
+        <h1 class="empty-title">Nothing has been created yet</h1>
+      </div>
+
+      <div *ngIf="!isLoading && historyItems.length > 0" class="history-grid">
+        <div *ngFor="let item of historyItems" class="history-card">
+          <div class="card-header">
+            <span class="type-badge" [ngClass]="item.type">{{ item.type | uppercase }}</span>
+            <span class="date">{{ item.createdAt | date:'short' }}</span>
+          </div>
+          
+          <div class="card-body">
+            <p class="prompt"><strong>Prompt:</strong> {{ item.prompt }}</p>
+            
+            <div *ngIf="item.isImage" class="result-image">
+              <!-- Using the server URL to load the image -->
+              <img [src]="apiUrl + item.result" alt="Generated content">
+            </div>
+            
+            <div *ngIf="!item.isImage" class="result-text">
+              <pre>{{ item.result }}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

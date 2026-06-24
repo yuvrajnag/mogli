@@ -48,4 +48,9 @@ export class ApiService {
   signup(name: string, email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/signup`, { name, email, password });
   }
+
+  /** History */
+  getHistory(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/history`);
+  }
 }

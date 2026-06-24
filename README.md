@@ -6,12 +6,12 @@
 
 <br/>
 
-## 🌟 Overview
+## Overview
 Mogli is an AI-powered creative suite that provides powerful generative tools for creators, featuring a clean, minimalist monochrome design.
 
 ---
 
-## ⚡ Features
+## Features
 - **Strict Monochrome UI:** The entire interface is built using pure black, deep greys, and stark white, creating a highly premium, distraction-free environment.
 - **Advanced Animations:** The login and authentication flow features a floating 3D grid floor, deep blurred ambient glows, and inputs that trace themselves with light.
 - **AI Text Assistant (Groq):** Blazing-fast conversational AI powered by Llama 3.1 8B via the Groq API.
@@ -19,14 +19,14 @@ Mogli is an AI-powered creative suite that provides powerful generative tools fo
 - **Creator Tools:** Dedicated interfaces for Logo Generation, Name Generation, Email Writing, Text Summarization, and Social Media Post Generation.
 - **Markdown Rendering:** Beautiful, natively rendered markdown for all AI responses—no raw asterisks or unformatted lists.
 
-### 🚀 Upcoming Features
+### Upcoming Features
 - **MongoDB Persistence:** Storing conversation histories, user accounts, and image generation libraries in a persistent MongoDB database.
 - **Workspace Collaboration:** Share your spaces with other creators.
 - **Advanced Toolset Expansion:** More specialized AI pipelines for marketing workflows.
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 This application has been fully migrated to a robust, modern architecture:
 - **Frontend:** Angular 19 (TypeScript, RxJS)
 - **Backend:** Node.js, Express.js (JavaScript)
@@ -36,7 +36,7 @@ This application has been fully migrated to a robust, modern architecture:
 
 ---
 
-## ⚙️ Installation & Usage
+## Installation & Usage
 
 Because Mogli is a decoupled MEAN stack application, you need to run the backend and frontend simultaneously.
 
@@ -87,7 +87,7 @@ Open `http://localhost:4200` in your browser. The frontend is configured with a 
 
 ---
 
-## 📡 API Endpoints (Backend)
+## API Endpoints (Backend)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|

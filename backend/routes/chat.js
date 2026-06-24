@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const { asyncHandler } = require('../middleware/errorHandler');
+const { verifyToken } = require('../middleware/auth');
+const History = require('../models/History');
 
 const router = express.Router();
 
@@ -19,6 +21,7 @@ const SYSTEM_PROMPTS = {
  */
 router.post(
   '/generate-names',
+  verifyToken,
   asyncHandler(async (req, res) => {
     const { prompt, mode = 'name' } = req.body;
 
@@ -50,6 +53,18 @@ router.post(
         },
       }
     );
+
+    const resultText = response.data?.choices?.[0]?.message?.content || '';
+
+    if (resultText) {
+      await History.create({
+        userId: req.user.id,
+        type: mode,
+        prompt: prompt,
+        result: resultText,
+        isImage: false
+      });
+    }
 
     res.json(response.data);
   })
