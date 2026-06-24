@@ -1,0 +1,6 @@
+:host { display: block; height: 100vh; }
+.layout { display: flex; height: 100vh; overflow: hidden; }
+.main-content { flex: 1; display: flex; flex-direction: column; }
+.empty-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: -50px; }
+.empty-img { width: 160px; max-width: 70%; height: auto; object-fit: contain; margin-bottom: 20px; opacity: 0.8; }
+.empty-title { font-size: 32px; font-weight: 500; color: #444; text-align: center; }

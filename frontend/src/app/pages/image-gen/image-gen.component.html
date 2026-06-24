@@ -1,0 +1,106 @@
+<div class="layout">
+  <app-sidebar activePage="logo-gen"></app-sidebar>
+  <div class="main-content">
+    <div class="header">
+      <div class="breadcrumbs">{{ breadcrumb }}</div>
+      <app-header></app-header>
+    </div>
+
+    <div class="workspace">
+      <!-- Left Panel: Controls -->
+      <div class="controls">
+        <div class="chat-bubble">
+          <img src="assets/paintm3.png" alt="Mogli" class="chat-avatar">
+          <div class="chat-content">
+            <div class="chat-name">Mogli</div>
+            <div class="chat-text">{{ chatText }}</div>
+          </div>
+        </div>
+
+        <div class="controls-content">
+          <div class="prompt-label">Prompt</div>
+          <div class="prompt-area">
+            <!-- Slash menu -->
+            <div class="slash-menu" *ngIf="showSlashMenu">
+              <div class="slash-option" (click)="selectMode('logo')">
+                <div class="slash-option-name">/logo</div>
+                <div class="slash-option-desc">Professional logo design</div>
+              </div>
+              <div class="slash-option" (click)="selectMode('poster')">
+                <div class="slash-option-name">/poster</div>
+                <div class="slash-option-desc">Social media posters</div>
+              </div>
+            </div>
+            <textarea
+              class="prompt-input"
+              [(ngModel)]="promptText"
+              (input)="onPromptInput()"
+              [placeholder]="currentMode === 'logo' ? 'Describe your logo' : 'Describe your poster'"
+            ></textarea>
+            <button class="enhance-btn" (click)="enhancePrompt()" [disabled]="isEnhancing">
+              <span class="enhance-label">{{ isEnhancing ? 'Enhancing...' : 'Enhance' }}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="action-row">
+            <div class="ratio-toggle" (click)="showRatioPopup = !showRatioPopup">
+              <div class="checkbox-fake"></div>
+              <span class="ratio-text">{{ currentRatio }}</span>
+              <div class="ratio-popup" *ngIf="showRatioPopup">
+                <div
+                  *ngFor="let opt of ratioOptions"
+                  class="ratio-option"
+                  [class.selected]="opt.ratio === currentRatio"
+                  (click)="selectRatio(opt.ratio); $event.stopPropagation()"
+                >{{ opt.label }}</div>
+              </div>
+            </div>
+            <button class="generate-btn" (click)="openConfirm()" [disabled]="isGenerating">
+              <span>{{ isGenerating ? 'Generating' : 'Generate' }}</span>
+              <img src="assets/sparkles.png" class="generate-icon-img">
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Preview -->
+      <div class="preview-area-container">
+        <div class="preview-card" [class.has-image]="generatedImageUrl">
+          <div *ngIf="!generatedImageUrl && !isGenerating" class="initial-state">
+            <div>Mogli is ready to create.</div>
+          </div>
+          <div *ngIf="isGenerating" class="initial-state">
+            <img src="assets/paintm2.png" style="width: 150px; opacity: 0.8; margin-bottom: 20px;">
+            <div>Generating masterpiece...</div>
+          </div>
+          <img *ngIf="generatedImageUrl" [src]="generatedImageUrl" class="generated-image">
+          <div *ngIf="generatedImageUrl" class="preview-overlay">
+            <div class="action-group-left">
+              <button class="action-btn" title="Like">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+            </div>
+            <div class="action-group-right">
+              <button class="action-btn" title="Download" (click)="downloadImage()">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal" *ngIf="showConfirmModal">
+  <div class="modal-content">
+    <h3>Confirm Generation</h3>
+    <p class="modal-desc">This costs 10 credits.</p>
+    <button class="modal-btn btn-cancel" (click)="showConfirmModal = false">Cancel</button>
+    <button class="modal-btn btn-confirm" (click)="confirmGenerate()">Confirm</button>
+  </div>
+</div>

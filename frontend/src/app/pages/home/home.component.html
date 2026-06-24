@@ -1,0 +1,17 @@
+<div class="hero-container">
+  <nav class="top-nav">
+    <div class="mogli-logo-nav">Mogli</div>
+    <button class="get-started-btn" (click)="goToLogin()">Get started</button>
+  </nav>
+
+  <video #heroVideo autoplay [muted]="isMuted" loop playsinline class="hero-video">
+    <source src="assets/bg.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="overlay"></div>
+
+  <button class="unmute-btn" (click)="toggleMute(heroVideo)">
+    <span>{{ isMuted ? 'UNMUTE AUDIO' : 'MUTE AUDIO' }}</span>
+  </button>
+</div>

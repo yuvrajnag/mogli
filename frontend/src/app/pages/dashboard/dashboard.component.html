@@ -1,0 +1,49 @@
+<div class="layout">
+  <app-sidebar activePage="home"></app-sidebar>
+  <div class="main-content">
+    <app-header></app-header>
+
+    <div class="content-scroll">
+      <div class="hero-title">What would you like to create today ?</div>
+
+      <div class="tools-grid">
+        <a routerLink="/image-gen" [queryParams]="{ mode: 'logo' }" class="tool-card">
+          <img src="assets/logo generator.png" class="tool-icon">
+        </a>
+        <a routerLink="/chat" [queryParams]="{ mode: 'name' }" class="tool-card">
+          <img src="assets/name generator.png" class="tool-icon">
+        </a>
+        <a routerLink="/chat" [queryParams]="{ mode: 'summarize' }" class="tool-card">
+          <img src="assets/text summarizer (1).png" class="tool-icon">
+        </a>
+        <a routerLink="/chat" [queryParams]="{ mode: 'email' }" class="tool-card">
+          <img src="assets/email writing.png" class="tool-icon">
+        </a>
+        <a routerLink="/chat" [queryParams]="{ mode: 'product' }" class="tool-card">
+          <img src="assets/product writer.png" class="tool-icon">
+        </a>
+        <a routerLink="/image-gen" [queryParams]="{ mode: 'poster' }" class="tool-card">
+          <img src="assets/post generator.png" class="tool-icon">
+        </a>
+      </div>
+
+      <div class="section-header">Projects</div>
+      <div class="projects-container">
+        <div class="empty-project-card">
+          <img src="assets/project error bg image.png" class="empty-img">
+          <div class="empty-text">No Projects found</div>
+          <div class="new-badge">+ New</div>
+        </div>
+      </div>
+
+      <div class="section-header">Recent creations</div>
+      <div class="recent-filters">
+        <div class="filter-pill active">All</div>
+        <div class="filter-pill">Images</div>
+        <div class="filter-pill">Text</div>
+        <div class="filter-pill">Others</div>
+      </div>
+      <div class="no-creations">No creations yet</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="layout">
+  <app-sidebar activePage="assistant"></app-sidebar>
+  <div class="main-content">
+    <!-- Header bar -->
+    <div class="header">
+      <div class="breadcrumbs">{{ breadcrumb }}</div>
+      <app-header></app-header>
+    </div>
+
+    <!-- Chat messages -->
+    <div class="chat-container" #chatContainer>
+      <!-- Initial greeting -->
+      <div class="message">
+        <div class="msg-avatar"><img src="assets/writer.png" alt="Mogli"></div>
+        <div class="msg-content">
+          <div class="msg-name">Mogli</div>
+          <div class="msg-text">{{ currentConfig.description }}</div>
+        </div>
+      </div>
+
+      <!-- Dynamic messages -->
+      <div *ngFor="let msg of messages" class="message">
+        <div class="msg-avatar">
+          <img *ngIf="msg.role === 'ai'" src="assets/paintm3.png" alt="Mogli">
+        </div>
+        <div class="msg-content">
+          <div class="msg-name">{{ msg.role === 'user' ? 'You' : 'Mogli' }}</div>
+          <!-- User messages: plain text -->
+          <div *ngIf="msg.role === 'user'" class="msg-text">{{ msg.text }}</div>
+          <!-- AI messages: rendered markdown -->
+          <div *ngIf="msg.role === 'ai'" class="msg-text markdown-content" [innerHTML]="msg.text | markdown"></div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div *ngIf="isLoading" class="message">
+        <div class="msg-avatar"><img src="assets/paintm3.png" alt="Mogli"></div>
+        <div class="msg-content">
+          <div class="msg-name">Mogli</div>
+          <div class="typing">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input area -->
+    <div class="input-area">
+      <div class="input-wrapper">
+        <!-- Slash menu -->
+        <div class="slash-menu" *ngIf="showSlashMenu">
+          <div class="slash-option" *ngFor="let opt of slashOptions" (click)="selectMode(opt.mode)">
+            <div class="slash-option-text">
+              <div class="slash-option-name">{{ opt.label }}</div>
+              <div class="slash-option-desc">{{ opt.desc }}</div>
+            </div>
+          </div>
+        </div>
+        <textarea
+          class="chat-input"
+          [(ngModel)]="inputText"
+          (input)="onInputChange()"
+          (keydown)="onKeyDown($event)"
+          (blur)="hideSlashMenu()"
+          placeholder="Describe what you need..."
+          rows="1"
+        ></textarea>
+        <button class="send-btn" (click)="sendMessage()" [disabled]="isLoading">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

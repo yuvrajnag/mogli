@@ -1,0 +1,78 @@
+<div class="universe-container">
+  <!-- Dynamic Background Layers -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="grid-floor"></div>
+
+  <!-- Main Interface -->
+  <main class="glass-panel" [class.panel-expanded]="isSignup">
+    <div class="panel-inner">
+      
+      <!-- Brand Header -->
+      <header class="brand-header">
+        <div class="logo-box">
+          <div class="logo-pulse"></div>
+          <img src="assets/Mogli logo name.png" alt="Mogli">
+        </div>
+        <h1 class="title">{{ isSignup ? 'Initialize Workspace' : 'System Access' }}</h1>
+        <p class="subtitle">{{ isSignup ? 'Configure your neural creative suite.' : 'Authenticate to enter the creator grid.' }}</p>
+      </header>
+
+      <!-- Alert -->
+      <div class="system-alert" *ngIf="errorMessage" [class.show]="errorMessage">
+        <span class="alert-icon">⚠</span>
+        <span class="alert-text">{{ errorMessage }}</span>
+      </div>
+
+      <!-- Auth Form -->
+      <form class="cyber-form" (ngSubmit)="handleSubmit()" #authForm="ngForm">
+        
+        <div class="input-container" *ngIf="isSignup">
+          <input type="text" id="name" name="name" [(ngModel)]="name" required placeholder=" ">
+          <label for="name">Alias / Name</label>
+          <div class="input-highlight"></div>
+        </div>
+
+        <div class="input-container">
+          <input type="email" id="email" name="email" [(ngModel)]="email" required placeholder=" ">
+          <label for="email">Neural ID (Email)</label>
+          <div class="input-highlight"></div>
+        </div>
+
+        <div class="input-container">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password" required placeholder=" ">
+          <label for="password">Passkey</label>
+          <div class="input-highlight"></div>
+          <button type="button" class="eye-btn" (click)="togglePassword()">
+            <svg *ngIf="!showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <svg *ngIf="showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+          </button>
+        </div>
+
+        <div class="form-actions">
+          <a class="forgot-link" *ngIf="!isSignup">Lost passkey?</a>
+        </div>
+
+        <button type="submit" class="cyber-btn" [disabled]="!authForm.form.valid || isLoading">
+          <span class="btn-text" *ngIf="!isLoading">{{ isSignup ? 'INITIALIZE' : 'AUTHENTICATE' }}</span>
+          <div class="loader" *ngIf="isLoading"></div>
+          <div class="btn-glint"></div>
+        </button>
+
+        <div class="demo-chip" *ngIf="!isSignup">
+          <span class="chip-label">DEMO NODE</span>
+          <span class="chip-val">demo&#64;mogli.com / password123</span>
+        </div>
+      </form>
+
+      <!-- Toggle Mode -->
+      <footer class="panel-footer">
+        <div class="mode-switch">
+          <span class="switch-text">{{ isSignup ? 'Existing node?' : 'New to the grid?' }}</span>
+          <button class="switch-btn" (click)="toggleMode()">{{ isSignup ? 'Authenticate' : 'Initialize' }}</button>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+</div>

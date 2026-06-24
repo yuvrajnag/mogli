@@ -1,0 +1,122 @@
+.sidebar {
+  width: 260px;
+  background-color: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-right: 1px solid var(--border-color);
+  flex-shrink: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+.logo-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.logo-img {
+  height: 50px;
+  object-fit: contain;
+}
+
+.sidebar-toggle {
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.workspace-selector {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  cursor: pointer;
+}
+
+.ws-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ws-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 25px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--secondary-text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background-color: #1e1e1e;
+  color: #fff;
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  opacity: 0.7;
+}
+
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon {
+  opacity: 1;
+}
+
+.section-label {
+  font-size: 11px;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  padding-left: 12px;
+}
+
+.divider {
+  height: 1px;
+  background-color: #222;
+  margin: 10px 0 25px 0;
+}
+
+.sign-out-btn {
+  margin-top: auto;
+  width: 10%;
+  cursor: pointer;
+  padding-bottom: 10px;
+}
+
+.sign-out-img {
+  width: 35px;
+  object-fit: contain;
+}

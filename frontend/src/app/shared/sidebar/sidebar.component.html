@@ -1,0 +1,62 @@
+<div class="sidebar">
+  <div class="logo-area">
+    <img src="assets/Mogli logo name.png" alt="Mogli" class="logo-img">
+    <img src="assets/sidebar.png" class="sidebar-toggle">
+  </div>
+
+  <div class="workspace-selector">
+    <div class="ws-left">
+      <img src="assets/personal.png" class="ws-icon">
+      <span>Personal</span>
+    </div>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </div>
+
+  <div class="nav-section">
+    <a routerLink="/dashboard" class="nav-item" [class.active]="activePage === 'home'">
+      <img src="assets/home 1.png" class="nav-icon">
+      <span>Home</span>
+    </a>
+    <a routerLink="/history" class="nav-item" [class.active]="activePage === 'history'">
+      <img src="assets/history 1.png" class="nav-icon">
+      <span>History</span>
+    </a>
+    <a routerLink="/projects" class="nav-item" [class.active]="activePage === 'projects'">
+      <img src="assets/folder (3).png" class="nav-icon">
+      <span>Projects</span>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">Tools</div>
+  <div class="nav-section">
+    <a routerLink="/placeholder" class="nav-item" [class.active]="activePage === 'spaces'">
+      <img src="assets/nodes.png" class="nav-icon">
+      <span>Spaces</span>
+    </a>
+    <a routerLink="/chat" [queryParams]="{ mode: 'general' }" class="nav-item" [class.active]="activePage === 'assistant'">
+      <img src="assets/assistant.png" class="nav-icon">
+      <span>Assistant</span>
+    </a>
+    <a routerLink="/image-gen" [queryParams]="{ mode: 'logo' }" class="nav-item" [class.active]="activePage === 'logo-gen'">
+      <img src="assets/generative-image 1.png" class="nav-icon">
+      <span>Logo Generator</span>
+    </a>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>All Tools</span>
+    </div>
+  </div>
+
+  <div class="sign-out-btn" (click)="signOut()">
+    <img src="assets/sign out.png" class="sign-out-img">
+  </div>
+</div>

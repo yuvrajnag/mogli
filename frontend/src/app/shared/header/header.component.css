@@ -1,0 +1,37 @@
+.top-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px 30px;
+  gap: 15px;
+}
+
+.credits-pill {
+  background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+  padding: 6px 14px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: black;
+}
+
+.credits-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.profile-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: black;
+  font-size: 14px;
+}

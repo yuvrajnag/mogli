@@ -1,0 +1,71 @@
+:host { display: block; height: 100vh; }
+.layout { display: flex; height: 100vh; overflow: hidden; }
+.main-content { flex: 1; display: flex; flex-direction: column; }
+
+.header { height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; border-bottom: 2px solid #333; flex-shrink: 0; }
+.breadcrumbs { font-size: 14px; color: var(--text-color); font-weight: 500; }
+
+.workspace { display: flex; flex: 1; height: calc(100vh - 70px); }
+
+/* Left Panel */
+.controls { width: 340px; display: flex; flex-direction: column; padding: 30px; padding-bottom: 15px; border-right: 2px solid #333; }
+.controls-content { margin-top: auto; width: 100%; }
+
+.chat-bubble { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+.chat-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%); padding: 1px; }
+.chat-content { flex: 1; }
+.chat-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.chat-text { font-size: 14px; color: #ccc; line-height: 1.4; }
+
+.prompt-label { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+.prompt-area { position: relative; }
+
+.prompt-input { width: 100%; height: 150px; background-color: #111; border: 1px solid #333; border-radius: 16px; padding: 16px; color: #fff; font-family: 'Inter', sans-serif; resize: none; margin-bottom: 20px; font-size: 15px; line-height: 1.5; }
+.prompt-input:focus { outline: none; border-color: #555; }
+
+.enhance-btn { position: absolute; bottom: 30px; right: 15px; background: none; border: none; color: #666; cursor: pointer; padding: 5px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 5px; }
+.enhance-btn:hover { color: #fff; background-color: rgba(255, 255, 255, 0.1); }
+.enhance-label { font-size: 12px; font-weight: 500; }
+
+.action-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+
+.ratio-toggle { display: flex; align-items: center; gap: 10px; background-color: black; border: 1px solid #333; padding: 0 14px; border-radius: 25px; cursor: pointer; height: 42px; position: relative; }
+.checkbox-fake { width: 18px; height: 18px; border: 1px solid #666; border-radius: 4px; }
+.ratio-text { font-size: 15px; font-weight: 700; }
+
+.ratio-popup { position: absolute; bottom: 50px; left: 0; width: 220px; background-color: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 100; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
+.ratio-option { display: flex; align-items: center; padding: 10px 12px; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; color: #ccc; }
+.ratio-option:hover, .ratio-option.selected { background-color: #333; color: #fff; }
+
+.generate-btn { flex: 1; background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%); font-family: 'Sarina', cursive; font-size: 20px; color: black; border: none; border-radius: 50px; padding: 0 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; height: 42px; transition: transform 0.1s; white-space: nowrap; }
+.generate-btn:active { transform: scale(0.98); }
+.generate-icon-img { width: 20px; height: 20px; object-fit: contain; }
+
+/* Right Panel */
+.preview-area-container { flex: 1; background-color: #000; display: flex; align-items: center; justify-content: center; padding: 40px; }
+.preview-card { width: 100%; height: 100%; background-color: #080808; border: 1px solid #333; border-radius: 24px; position: relative; overflow: hidden; }
+.initial-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #666; text-align: center; gap: 15px; }
+.generated-image { width: 100%; height: 100%; object-fit: contain; border-radius: 24px; }
+
+.preview-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; display: flex; justify-content: space-between; align-items: flex-end; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent); border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 10; }
+.preview-card:hover .preview-overlay, .preview-card.has-image .preview-overlay { opacity: 1; pointer-events: auto; }
+.action-group-left, .action-group-right { display: flex; gap: 10px; }
+
+.action-btn { background-color: #fff; color: black; border: none; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+.action-btn:hover { transform: scale(1.1); background-color: #f0f0f0; }
+.action-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Slash menu */
+.slash-menu { position: absolute; bottom: 100%; left: 0; width: 100%; background-color: #1a1a1a; border: 1px solid #333; border-radius: 12px; margin-bottom: 10px; display: flex; flex-direction: column; overflow: hidden; z-index: 1000; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+.slash-option { padding: 12px 16px; cursor: pointer; transition: background-color 0.2s; }
+.slash-option:hover { background-color: #333; }
+.slash-option-name { font-size: 14px; font-weight: 600; color: #fff; }
+.slash-option-desc { font-size: 12px; color: #888; }
+
+/* Modal */
+.modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; }
+.modal-content { background-color: #1a1a1a; padding: 30px; border-radius: 20px; border: 1px solid #333; text-align: center; width: 320px; }
+.modal-desc { margin: 15px 0; color: #aaa; }
+.modal-btn { padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; margin: 0 5px; }
+.btn-cancel { background-color: #333; color: white; }
+.btn-confirm { background: linear-gradient(90deg, #FFFFFF 0%, #AEAEAE 47.6%, #FFFFFF 94.23%); color: black; }

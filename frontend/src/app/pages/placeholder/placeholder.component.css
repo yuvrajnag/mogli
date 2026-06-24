@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #000;
+}
+.container { text-align: center; }
+h1 { font-size: 2rem; margin-bottom: 1rem; }
+p { color: #888; margin-bottom: 2rem; }
+.back-btn { padding: 10px 20px; background: #fff; color: #000; text-decoration: none; border-radius: 8px; font-weight: 600; }
