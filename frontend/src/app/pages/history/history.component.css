@@ -1,13 +1,13 @@
 :host { display: block; height: 100vh; }
 .layout { display: flex; height: 100vh; overflow: hidden; }
-.main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background-color: #f8fafc; }
+.main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background-color: var(--bg-color); }
 .empty-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: -50px; }
-.empty-img { width: 160px; max-width: 70%; height: auto; object-fit: contain; margin-bottom: 20px; opacity: 0.8; }
-.empty-title { font-size: 32px; font-weight: 500; color: #444; text-align: center; }
+.empty-img { width: 160px; max-width: 70%; height: auto; object-fit: contain; margin-bottom: 20px; opacity: 0.8; filter: grayscale(100%); }
+.empty-title { font-size: 32px; font-weight: 500; color: #fff; text-align: center; }
 
 .history-container { padding: 40px; }
-.page-title { font-size: 28px; margin-bottom: 30px; color: #1e293b; font-weight: 600; }
-.loading-state { text-align: center; padding: 40px; color: #64748b; font-size: 18px; }
+.page-title { font-size: 28px; margin-bottom: 30px; color: #fff; font-weight: 600; }
+.loading-state { text-align: center; padding: 40px; color: #888; font-size: 18px; }
 
 .history-grid {
   display: grid;
@@ -16,9 +16,9 @@
 }
 
 .history-card {
-  background: white;
+  background: #111;
+  border: 1px solid #333;
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -27,7 +27,7 @@
 
 .history-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #555;
 }
 
 .card-header {
@@ -36,7 +36,7 @@
   align-items: center;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #333;
 }
 
 .type-badge {
@@ -44,16 +44,17 @@
   border-radius: 9999px;
   font-size: 12px;
   font-weight: 600;
-  color: white;
-  background-color: #3b82f6;
+  color: #fff;
+  background-color: #333;
+  border: 1px solid #555;
 }
-.type-badge.logo { background-color: #8b5cf6; }
-.type-badge.post { background-color: #ec4899; }
-.type-badge.name { background-color: #10b981; }
+.type-badge.logo { background-color: #222; }
+.type-badge.post { background-color: #2a2a2a; }
+.type-badge.name { background-color: #1a1a1a; }
 
 .date {
   font-size: 13px;
-  color: #64748b;
+  color: #888;
 }
 
 .card-body {
@@ -64,7 +65,7 @@
 
 .prompt {
   font-size: 14px;
-  color: #334155;
+  color: #ddd;
   margin-bottom: 16px;
   line-height: 1.5;
 }
@@ -77,11 +78,12 @@
 }
 
 .result-text pre {
-  background: #f1f5f9;
+  background: #0a0a0a;
   padding: 12px;
   border-radius: 8px;
   font-size: 14px;
-  color: #0f172a;
+  color: #ccc;
+  border: 1px solid #222;
   white-space: pre-wrap;
   word-wrap: break-word;
   max-height: 200px;

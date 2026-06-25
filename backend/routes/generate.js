@@ -57,24 +57,31 @@ router.post(
     const HF_MODEL_ID = process.env.HF_MODEL_ID;
     const HF_API_KEY = process.env.HF_API_KEY;
 
-    const response = await axios.post(
-      `${HF_API_URL}/${HF_MODEL_ID}`,
-      {
-        inputs: enhancedPrompt,
-        parameters: {
-          negative_prompt: negativePrompt,
-          width,
-          height,
+    let response;
+    try {
+      response = await axios.post(
+        `${HF_API_URL}/${HF_MODEL_ID}`,
+        {
+          inputs: enhancedPrompt,
+          parameters: {
+            negative_prompt: negativePrompt,
+            width,
+            height,
+          },
         },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${HF_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        responseType: 'arraybuffer',
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${HF_API_KEY}`,
+            'Content-Type': 'application/json',
+            'Accept': 'image/png',
+          },
+          responseType: 'arraybuffer',
+        }
+      );
+    } catch (e) {
+      console.error('HF API Error:', e.response?.data ? Buffer.from(e.response.data).toString() : e.message);
+      throw e;
+    }
 
     const buffer = Buffer.from(response.data);
     const filename = `logo_${Date.now()}.png`;
@@ -116,24 +123,31 @@ router.post(
     const HF_MODEL_ID = process.env.HF_MODEL_ID;
     const HF_API_KEY = process.env.HF_API_KEY;
 
-    const response = await axios.post(
-      `${HF_API_URL}/${HF_MODEL_ID}`,
-      {
-        inputs: enhancedPrompt,
-        parameters: {
-          negative_prompt: negativePrompt,
-          width,
-          height,
+    let response;
+    try {
+      response = await axios.post(
+        `${HF_API_URL}/${HF_MODEL_ID}`,
+        {
+          inputs: enhancedPrompt,
+          parameters: {
+            negative_prompt: negativePrompt,
+            width,
+            height,
+          },
         },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${HF_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        responseType: 'arraybuffer',
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${HF_API_KEY}`,
+            'Content-Type': 'application/json',
+            'Accept': 'image/png',
+          },
+          responseType: 'arraybuffer',
+        }
+      );
+    } catch (e) {
+      console.error('HF API Error (Post):', e.response?.data ? Buffer.from(e.response.data).toString() : e.message);
+      throw e;
+    }
 
     const buffer = Buffer.from(response.data);
     const filename = `post_${Date.now()}.png`;

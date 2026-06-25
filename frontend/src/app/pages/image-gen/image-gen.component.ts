@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ApiService } from '../../services/api.service';
@@ -24,7 +25,8 @@ export class ImageGenComponent implements OnInit {
   showRatioPopup = false;
   showSlashMenu = false;
   showConfirmModal = false;
-  generatedImageUrl: string | null = null;
+  generatedImageUrl: SafeUrl | null = null;
+  rawImageUrl: string | null = null;
 
   ratioOptions = [
     { ratio: '1:1', label: '1:1 Square' },
@@ -38,7 +40,8 @@ export class ImageGenComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private creditsService: CreditsService
+    private creditsService: CreditsService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -98,6 +101,7 @@ export class ImageGenComponent implements OnInit {
     this.creditsService.useCredits(10);
     this.isGenerating = true;
     this.generatedImageUrl = null;
+    this.rawImageUrl = null;
 
     try {
       const observable = this.currentMode === 'logo'
@@ -106,7 +110,9 @@ export class ImageGenComponent implements OnInit {
 
       const blob = await observable.toPromise();
       if (blob) {
-        this.generatedImageUrl = URL.createObjectURL(blob);
+        const objectUrl = URL.createObjectURL(blob);
+        this.rawImageUrl = objectUrl;
+        this.generatedImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
         this.chatText = 'Here is your masterpiece! Hope you love it.';
       }
     } catch (err: any) {
@@ -132,9 +138,9 @@ export class ImageGenComponent implements OnInit {
   }
 
   downloadImage(): void {
-    if (!this.generatedImageUrl) return;
+    if (!this.rawImageUrl) return;
     const a = document.createElement('a');
-    a.href = this.generatedImageUrl;
+    a.href = this.rawImageUrl;
     a.download = `mogli-art-${Date.now()}.png`;
     document.body.appendChild(a);
     a.click();

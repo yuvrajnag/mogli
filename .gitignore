@@ -12,6 +12,7 @@ tmp/
 node_modules/
 dist/
 build/
+backend/public/uploads/
 
 # Ignore system/agent metadata
 .agent/
